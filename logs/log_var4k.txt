@@ -1,0 +1,6 @@
+steps 8000 init seed 9300: 121s F rmse 0.458  member rmse [0.56, 0.44, 0.23, 0.6]
+steps 8000 init seed 1: 121s F rmse 0.396  member rmse [0.62, 0.26, 0.24, 0.46]
+steps 8000 init seed 2: 132s F rmse 0.446  member rmse [0.36, 0.57, 0.52, 0.34]
+steps 3000 init seed 9300: 48s F rmse 0.796  member rmse [1.01, 0.8, 0.36, 1.02]
+steps 3000 init seed 1: 43s F rmse 0.576  member rmse [1.06, 0.18, 0.06, 1.02]
+steps 3000 init seed 2: 47s F rmse 0.900  member rmse [1.08, 1.21, 0.69, 0.64]

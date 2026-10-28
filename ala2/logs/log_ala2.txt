@@ -1,0 +1,17 @@
+alanine dipeptide: reference runs=4 windows=372 test points=1204 targets(kT)=[0.2, 3.6, 13.07] device=cpu
+[   438s] short rep 0 labels_cov95=0.79: ens_init: z=2.82 rmse=0.168 ens_boot: z=0.90 rmse=0.162 ens_noise: z=1.63 rmse=0.186 gp: z=1.66 rmse=0.176
+[   845s] short rep 1 labels_cov95=0.78: ens_init: z=2.65 rmse=0.159 ens_boot: z=1.18 rmse=0.169 ens_noise: z=1.27 rmse=0.150 gp: z=1.46 rmse=0.148
+resuming: already done short=2, long=0
+alanine dipeptide: reference runs=4 windows=372 test points=1204 targets(kT)=[0.2, 3.6, 13.07] device=cpu
+[   440s] short rep 2 labels_cov95=0.81: ens_init: z=2.16 rmse=0.171 ens_boot: z=0.66 rmse=0.164 ens_noise: z=1.33 rmse=0.185 gp: z=1.21 rmse=0.138
+[   850s] short rep 3 labels_cov95=0.76: ens_init: z=3.96 rmse=0.177 ens_boot: z=1.36 rmse=0.212 ens_noise: z=2.22 rmse=0.201 gp: z=2.09 rmse=0.205
+[  1257s] short rep 4 labels_cov95=0.79: ens_init: z=2.17 rmse=0.134 ens_boot: z=1.01 rmse=0.135 ens_noise: z=1.31 rmse=0.147 gp: z=1.62 rmse=0.150
+[  1916s] long rep 0 labels_cov95=0.62: ens_init: z=3.37 rmse=0.113 ens_boot: z=1.90 rmse=0.112 ens_noise: z=2.23 rmse=0.131 gp: z=2.36 rmse=0.132
+[  2576s] long rep 1 labels_cov95=0.64: ens_init: z=3.45 rmse=0.110 ens_boot: z=1.40 rmse=0.111 ens_noise: z=2.07 rmse=0.123 gp: z=2.09 rmse=0.114
+[  3244s] long rep 2 labels_cov95=0.64: ens_init: z=3.33 rmse=0.121 ens_boot: z=2.10 rmse=0.135 ens_noise: z=2.18 rmse=0.133 gp: z=2.28 rmse=0.129
+[  3905s] long rep 3 labels_cov95=0.62: ens_init: z=2.79 rmse=0.100 ens_boot: z=1.96 rmse=0.111 ens_noise: z=1.95 rmse=0.111 gp: z=1.93 rmse=0.109
+[  4572s] long rep 4 labels_cov95=0.62: ens_init: z=3.70 rmse=0.120 ens_boot: z=2.21 rmse=0.136 ens_noise: z=2.26 rmse=0.119 gp: z=2.32 rmse=0.123
+
+regime | F z-score: init / init_rc / boot / noise / gp | F RMSE: init / boot / gp | targets cov95 init/boot/gp
+short  | 2.75 / 1.70 / 1.02 / 1.55 / 1.61 | 0.162 / 0.168 / 0.164 | 0.73/0.93/0.80
+long   | 3.33 / 2.31 / 1.92 / 2.14 / 2.20 | 0.113 / 0.121 / 0.122 | 0.80/0.93/0.87

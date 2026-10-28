@@ -1,0 +1,6 @@
+windows 4000 lbfgs 0: 132s F rmse 0.458 z 3.70 members [0.56, 0.44, 0.23, 0.6]
+windows 4000 lbfgs 500: 150s F rmse 0.220 z 2.31 members [0.11, 0.2, 0.34, 0.24]
+windows 2000 lbfgs 0: 98s F rmse 0.068 z 3.93 members [0.06, 0.08, 0.27, 0.08]
+windows 2000 lbfgs 500: 106s F rmse 0.087 z 2.13 members [0.09, 0.1, 0.14, 0.05]
+windows 500 lbfgs 0: 42s F rmse 0.135 z 2.54 members [0.07, 0.22, 0.17, 0.12]
+windows 500 lbfgs 500: 47s F rmse 0.143 z 4.05 members [0.08, 0.24, 0.23, 0.07]

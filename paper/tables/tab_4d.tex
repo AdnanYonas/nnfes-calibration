@@ -1,0 +1,20 @@
+\begin{table*}
+\caption{Four-dimensional system (8 replicas, 1000 Sobol windows): free-energy RMSE (kT) and RMS $z$-score for the
+default network settings $\to$ the settings selected on held-out labels only ($\lambda=3\times10^{-3}$, 8000 steps).
+The GP is unchanged.}
+\label{tab:4d}
+\begin{ruledtabular}
+\begin{tabular}{lcccc}
+ & \multicolumn{2}{c}{Short runs} & \multicolumn{2}{c}{Long runs} \\
+\cline{2-3}\cline{4-5}
+Method & RMSE$_F$ & $z_F$ & RMSE$_F$ & $z_F$ \\
+\hline
+Random-init ensemble & 0.30$\to$0.20 & 2.27$\to$3.67 & 0.26$\to$0.13 & 1.74$\to$2.53 \\
+\quad + held-out rescaling & 0.30$\to$0.20 & 0.90$\to$0.82 & 0.26$\to$0.13 & 1.76$\to$1.40 \\
+Bootstrap ensemble & 0.64$\to$0.33 & 1.14$\to$1.18 & 0.57$\to$0.29 & 1.52$\to$1.55 \\
+Noise-injected ensemble & 0.46$\to$0.27 & 5.64$\to$9.16 & 0.42$\to$0.23 & 1.76$\to$2.58 \\
+\quad + held-out rescaling & 0.46$\to$0.27 & 3.58$\to$3.08 & 0.42$\to$0.23 & 2.07$\to$1.60 \\
+Gradient GP & 0.15 & 8.59 & 0.07 & 3.42 \\
+\end{tabular}
+\end{ruledtabular}
+\end{table*}

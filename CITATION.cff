@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this code or data, please cite it as below."
+title: "Code and data for: Do neural-network free-energy surfaces know when they are wrong? Calibrated uncertainty for free-energy landscapes learned from mean forces"
+version: 1.0.0
+date-released: 2026-10-19
+license: MIT
+repository-code: "https://github.com/AdnanYonas/nnfes-calibration"
+authors:
+  - family-names: Younas
+    given-names: Adnan
+    affiliation: "Department of Computer Science, Bahria University, Islamabad, Pakistan"
+  - family-names: Adnan
+    given-names: Habiba
+    affiliation: "Department of Computer Science, Virtual University of Pakistan, Islamabad, Pakistan"
+keywords:
+  - free energy
+  - uncertainty quantification
+  - calibration
+  - neural networks
+  - Gaussian processes
+  - umbrella integration
+  - metadynamics
+  - alanine dipeptide

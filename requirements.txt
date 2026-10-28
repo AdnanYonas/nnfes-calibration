@@ -1,0 +1,6 @@
+# Versions used for the published results (newer versions should work)
+numpy>=2.0        # used: 2.4 (Windows) / 2.5.3 (Linux)
+scipy>=1.13       # used: 1.18.1
+matplotlib>=3.8   # used: 3.11.2
+torch>=2.2        # used: 2.14.1 (CPU is enough; a CUDA GPU is used automatically if present)
+openmm>=8.1       # used: 8.6.1 (only for the alanine dipeptide part, ala2/)

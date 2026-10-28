@@ -1,0 +1,21 @@
+\begin{table*}
+\caption{Two-dimensional system with exact $F$: calibration and accuracy (10 replicas per regime, 245 windows). $z$ is the RMS $z$-score (1 = calibrated, $>1$ = overconfident) for the mean force ($z_{\nabla F}$) and the anchored free energy ($z_F$) on the test grid; cov$_{95}$ is the fraction of nominal 95\% intervals that contain the truth, for $F$ on the grid and for the three scalar targets across replicas (30 estimates per cell).}
+\label{tab:2d}
+\begin{ruledtabular}
+\begin{tabular}{lcccccccccc}
+ & \multicolumn{5}{c}{Short runs} & \multicolumn{5}{c}{Long runs} \\
+\cline{2-6}\cline{7-11}
+Method & $z_{\nabla F}$ & $z_F$ & cov$_{95}^F$ (\%) & RMSE$_F$ (kT) & cov$_{95}^{\rm tgt}$ (\%) & $z_{\nabla F}$ & $z_F$ & cov$_{95}^F$ (\%) & RMSE$_F$ (kT) & cov$_{95}^{\rm tgt}$ (\%) \\
+\hline
+Random-init ensemble & 3.92 & 7.27 & 24 & 0.092 & 27 & 4.52 & 10.66 & 16 & 0.052 & 17 \\
+\quad + held-out rescaling & 1.27 & 2.45 & 64 & 0.092 & 60 & 1.68 & 3.97 & 41 & 0.052 & 50 \\
+Bootstrap ensemble & 1.10 & 0.98 & 95 & 0.097 & 100 & 1.52 & 1.97 & 69 & 0.053 & 70 \\
+\quad + held-out rescaling & 1.16 & 1.04 & 92 & 0.097 & 100 & 1.52 & 1.96 & 69 & 0.053 & 70 \\
+Noise-injected ensemble & 4.47 & 4.11 & 43 & 0.128 & 67 & 2.34 & 2.90 & 47 & 0.049 & 50 \\
+\quad + held-out rescaling & 2.23 & 2.00 & 74 & 0.128 & 93 & 2.15 & 2.67 & 54 & 0.049 & 57 \\
+Gradient GP & 4.59 & 4.11 & 38 & 0.121 & 63 & 2.80 & 3.07 & 41 & 0.048 & 43 \\
+\hline
+Labels (block errors) & \multicolumn{5}{c}{95\% coverage 71\%} & \multicolumn{5}{c}{95\% coverage 65\%} \\
+\end{tabular}
+\end{ruledtabular}
+\end{table*}

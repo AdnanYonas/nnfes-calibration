@@ -1,0 +1,107 @@
+4D device=cpu windows=1000 replicas=8 members=8 epochs=4000 label_mode=md
+[   414s] short rep 0 labels_cov95=0.73: ens_init:Fcov95=0.63 ens_boot:Fcov95=0.87 ens_noise:Fcov95=0.43 gp:Fcov95=0.36 | train s/ens 102 gp 97
+[   634s] short rep 1 labels_cov95=0.74: ens_init:Fcov95=0.56 ens_boot:Fcov95=0.93 ens_noise:Fcov95=0.39 gp:Fcov95=0.37 | train s/ens 49 gp 60
+[   859s] short rep 2 labels_cov95=0.77: ens_init:Fcov95=0.77 ens_boot:Fcov95=0.96 ens_noise:Fcov95=0.53 gp:Fcov95=0.42 | train s/ens 51 gp 60
+[  1140s] short rep 3 labels_cov95=0.73: ens_init:Fcov95=0.66 ens_boot:Fcov95=0.69 ens_noise:Fcov95=0.44 gp:Fcov95=0.37 | train s/ens 51 gp 116
+[  1403s] short rep 4 labels_cov95=0.77: ens_init:Fcov95=0.61 ens_boot:Fcov95=0.93 ens_noise:Fcov95=0.52 gp:Fcov95=0.40 | train s/ens 50 gp 101
+[  1620s] short rep 5 labels_cov95=0.75: ens_init:Fcov95=0.54 ens_boot:Fcov95=0.95 ens_noise:Fcov95=0.44 gp:Fcov95=0.24 | train s/ens 48 gp 61
+[  1852s] short rep 6 labels_cov95=0.74: ens_init:Fcov95=0.75 ens_boot:Fcov95=0.98 ens_noise:Fcov95=0.50 gp:Fcov95=0.37 | train s/ens 50 gp 71
+[  2142s] short rep 7 labels_cov95=0.76: ens_init:Fcov95=0.87 ens_boot:Fcov95=0.99 ens_noise:Fcov95=0.52 gp:Fcov95=0.33 | train s/ens 51 gp 123
+[  2479s] long rep 0 labels_cov95=0.73: ens_init:Fcov95=0.73 ens_boot:Fcov95=0.88 ens_noise:Fcov95=0.86 gp:Fcov95=0.20 | train s/ens 48 gp 89
+[  2787s] long rep 1 labels_cov95=0.73: ens_init:Fcov95=0.86 ens_boot:Fcov95=0.87 ens_noise:Fcov95=0.53 gp:Fcov95=0.37 | train s/ens 49 gp 57
+[  3153s] long rep 2 labels_cov95=0.73: ens_init:Fcov95=0.84 ens_boot:Fcov95=0.94 ens_noise:Fcov95=0.62 gp:Fcov95=0.38 | train s/ens 51 gp 109
+[  3473s] long rep 3 labels_cov95=0.74: ens_init:Fcov95=0.75 ens_boot:Fcov95=0.82 ens_noise:Fcov95=0.79 gp:Fcov95=0.31 | train s/ens 48 gp 71
+[  3786s] long rep 4 labels_cov95=0.74: ens_init:Fcov95=0.74 ens_boot:Fcov95=0.87 ens_noise:Fcov95=0.86 gp:Fcov95=0.43 | train s/ens 47 gp 70
+[  4096s] long rep 5 labels_cov95=0.73: ens_init:Fcov95=0.86 ens_boot:Fcov95=0.89 ens_noise:Fcov95=0.80 gp:Fcov95=0.56 | train s/ens 48 gp 64
+[  4496s] long rep 6 labels_cov95=0.74: ens_init:Fcov95=0.92 ens_boot:Fcov95=0.84 ens_noise:Fcov95=0.54 gp:Fcov95=0.29 | train s/ens 63 gp 108
+[  4855s] long rep 7 labels_cov95=0.74: ens_init:Fcov95=0.53 ens_boot:Fcov95=0.57 ens_noise:Fcov95=0.84 gp:Fcov95=0.25 | train s/ens 48 gp 112
+{
+ "short": {
+  "ens_init": {
+   "force_z_rms": 1.955,
+   "F_z_rms": 2.266,
+   "F_rmse": 0.304,
+   "targets_cov95": 0.875
+  },
+  "ens_init_rc": {
+   "force_z_rms": 0.781,
+   "F_z_rms": 0.905,
+   "F_rmse": 0.304,
+   "targets_cov95": 1.0
+  },
+  "ens_boot": {
+   "force_z_rms": 0.976,
+   "F_z_rms": 1.144,
+   "F_rmse": 0.638,
+   "targets_cov95": 0.875
+  },
+  "ens_boot_rc": {
+   "force_z_rms": 0.736,
+   "F_z_rms": 0.857,
+   "F_rmse": 0.638,
+   "targets_cov95": 1.0
+  },
+  "ens_noise": {
+   "force_z_rms": 3.387,
+   "F_z_rms": 5.64,
+   "F_rmse": 0.461,
+   "targets_cov95": 0.792
+  },
+  "ens_noise_rc": {
+   "force_z_rms": 2.153,
+   "F_z_rms": 3.584,
+   "F_rmse": 0.461,
+   "targets_cov95": 1.0
+  },
+  "gp": {
+   "force_z_rms": 6.139,
+   "F_z_rms": 8.594,
+   "F_rmse": 0.154,
+   "targets_cov95": 0.75
+  }
+ },
+ "long": {
+  "ens_init": {
+   "force_z_rms": 1.51,
+   "F_z_rms": 1.745,
+   "F_rmse": 0.262,
+   "targets_cov95": 1.0
+  },
+  "ens_init_rc": {
+   "force_z_rms": 1.519,
+   "F_z_rms": 1.756,
+   "F_rmse": 0.262,
+   "targets_cov95": 1.0
+  },
+  "ens_boot": {
+   "force_z_rms": 1.101,
+   "F_z_rms": 1.523,
+   "F_rmse": 0.571,
+   "targets_cov95": 0.917
+  },
+  "ens_boot_rc": {
+   "force_z_rms": 1.432,
+   "F_z_rms": 1.982,
+   "F_rmse": 0.571,
+   "targets_cov95": 0.625
+  },
+  "ens_noise": {
+   "force_z_rms": 1.372,
+   "F_z_rms": 1.761,
+   "F_rmse": 0.418,
+   "targets_cov95": 0.625
+  },
+  "ens_noise_rc": {
+   "force_z_rms": 1.618,
+   "F_z_rms": 2.071,
+   "F_rmse": 0.418,
+   "targets_cov95": 0.542
+  },
+  "gp": {
+   "force_z_rms": 3.07,
+   "F_z_rms": 3.422,
+   "F_rmse": 0.07,
+   "targets_cov95": 0.333
+  }
+ }
+}

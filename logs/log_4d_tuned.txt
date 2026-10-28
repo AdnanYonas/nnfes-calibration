@@ -1,0 +1,107 @@
+4D device=cpu windows=1000 replicas=8 members=8 epochs=8000 wd=0.003 label_mode=md
+[   463s] short rep 0 labels_cov95=0.73: ens_init:Fcov95=0.25 ens_boot:Fcov95=0.72 ens_noise:Fcov95=0.41 gp:Fcov95=0.36 | train s/ens 150 gp 97
+[   954s] short rep 1 labels_cov95=0.74: ens_init:Fcov95=0.36 ens_boot:Fcov95=0.63 ens_noise:Fcov95=0.23 gp:Fcov95=0.37 | train s/ens 160 gp 60
+[  1436s] short rep 2 labels_cov95=0.77: ens_init:Fcov95=0.72 ens_boot:Fcov95=0.95 ens_noise:Fcov95=0.31 gp:Fcov95=0.42 | train s/ens 157 gp 60
+[  1920s] short rep 3 labels_cov95=0.73: ens_init:Fcov95=0.60 ens_boot:Fcov95=0.68 ens_noise:Fcov95=0.23 gp:Fcov95=0.37 | train s/ens 157 gp 116
+[  2403s] short rep 4 labels_cov95=0.77: ens_init:Fcov95=0.47 ens_boot:Fcov95=0.94 ens_noise:Fcov95=0.31 gp:Fcov95=0.40 | train s/ens 157 gp 101
+[  2903s] short rep 5 labels_cov95=0.75: ens_init:Fcov95=0.48 ens_boot:Fcov95=0.97 ens_noise:Fcov95=0.34 gp:Fcov95=0.24 | train s/ens 163 gp 61
+[  3401s] short rep 6 labels_cov95=0.74: ens_init:Fcov95=0.56 ens_boot:Fcov95=0.95 ens_noise:Fcov95=0.18 gp:Fcov95=0.37 | train s/ens 162 gp 71
+[  3813s] short rep 7 labels_cov95=0.76: ens_init:Fcov95=0.81 ens_boot:Fcov95=0.98 ens_noise:Fcov95=0.34 gp:Fcov95=0.33 | train s/ens 133 gp 123
+[  4325s] long rep 0 labels_cov95=0.73: ens_init:Fcov95=0.61 ens_boot:Fcov95=0.79 ens_noise:Fcov95=0.48 gp:Fcov95=0.20 | train s/ens 136 gp 89
+[  4808s] long rep 1 labels_cov95=0.73: ens_init:Fcov95=0.78 ens_boot:Fcov95=0.93 ens_noise:Fcov95=0.43 gp:Fcov95=0.37 | train s/ens 126 gp 57
+[  5378s] long rep 2 labels_cov95=0.73: ens_init:Fcov95=0.72 ens_boot:Fcov95=0.93 ens_noise:Fcov95=0.51 gp:Fcov95=0.38 | train s/ens 156 gp 109
+[  5930s] long rep 3 labels_cov95=0.74: ens_init:Fcov95=0.60 ens_boot:Fcov95=0.81 ens_noise:Fcov95=0.72 gp:Fcov95=0.31 | train s/ens 150 gp 71
+[  6507s] long rep 4 labels_cov95=0.74: ens_init:Fcov95=0.73 ens_boot:Fcov95=0.95 ens_noise:Fcov95=0.72 gp:Fcov95=0.43 | train s/ens 158 gp 70
+[  7072s] long rep 5 labels_cov95=0.73: ens_init:Fcov95=0.73 ens_boot:Fcov95=0.88 ens_noise:Fcov95=0.70 gp:Fcov95=0.56 | train s/ens 154 gp 64
+[  7667s] long rep 6 labels_cov95=0.74: ens_init:Fcov95=0.52 ens_boot:Fcov95=0.86 ens_noise:Fcov95=0.47 gp:Fcov95=0.29 | train s/ens 164 gp 108
+[  8240s] long rep 7 labels_cov95=0.74: ens_init:Fcov95=0.49 ens_boot:Fcov95=0.54 ens_noise:Fcov95=0.42 gp:Fcov95=0.25 | train s/ens 156 gp 112
+{
+ "short": {
+  "gp": {
+   "force_z_rms": 6.139,
+   "F_z_rms": 8.594,
+   "F_rmse": 0.154,
+   "targets_cov95": 0.75
+  },
+  "ens_init": {
+   "force_z_rms": 3.178,
+   "F_z_rms": 3.668,
+   "F_rmse": 0.199,
+   "targets_cov95": 0.75
+  },
+  "ens_init_rc": {
+   "force_z_rms": 0.716,
+   "F_z_rms": 0.823,
+   "F_rmse": 0.199,
+   "targets_cov95": 1.0
+  },
+  "ens_boot": {
+   "force_z_rms": 1.202,
+   "F_z_rms": 1.181,
+   "F_rmse": 0.33,
+   "targets_cov95": 0.708
+  },
+  "ens_boot_rc": {
+   "force_z_rms": 0.724,
+   "F_z_rms": 0.707,
+   "F_rmse": 0.33,
+   "targets_cov95": 1.0
+  },
+  "ens_noise": {
+   "force_z_rms": 5.764,
+   "F_z_rms": 9.156,
+   "F_rmse": 0.275,
+   "targets_cov95": 0.417
+  },
+  "ens_noise_rc": {
+   "force_z_rms": 1.947,
+   "F_z_rms": 3.076,
+   "F_rmse": 0.275,
+   "targets_cov95": 1.0
+  }
+ },
+ "long": {
+  "gp": {
+   "force_z_rms": 3.07,
+   "F_z_rms": 3.422,
+   "F_rmse": 0.07,
+   "targets_cov95": 0.333
+  },
+  "ens_init": {
+   "force_z_rms": 2.584,
+   "F_z_rms": 2.529,
+   "F_rmse": 0.134,
+   "targets_cov95": 0.875
+  },
+  "ens_init_rc": {
+   "force_z_rms": 1.428,
+   "F_z_rms": 1.405,
+   "F_rmse": 0.134,
+   "targets_cov95": 0.875
+  },
+  "ens_boot": {
+   "force_z_rms": 1.592,
+   "F_z_rms": 1.553,
+   "F_rmse": 0.289,
+   "targets_cov95": 1.0
+  },
+  "ens_boot_rc": {
+   "force_z_rms": 1.373,
+   "F_z_rms": 1.345,
+   "F_rmse": 0.289,
+   "targets_cov95": 1.0
+  },
+  "ens_noise": {
+   "force_z_rms": 2.395,
+   "F_z_rms": 2.58,
+   "F_rmse": 0.234,
+   "targets_cov95": 0.417
+  },
+  "ens_noise_rc": {
+   "force_z_rms": 1.494,
+   "F_z_rms": 1.604,
+   "F_rmse": 0.234,
+   "targets_cov95": 0.792
+  }
+ }
+}

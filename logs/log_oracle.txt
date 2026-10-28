@@ -1,0 +1,125 @@
+device=cpu windows=245 replicas=10 members=8 epochs=4000 label_mode=oracle
+[    44s] short rep 0 labels_cov95=0.96: ens_init:Fcov95=0.60 ens_noise:Fcov95=0.98 ens_noise_rc:Fcov95=0.95 gp:Fcov95=0.98
+[    89s] short rep 1 labels_cov95=0.95: ens_init:Fcov95=0.30 ens_noise:Fcov95=1.00 ens_noise_rc:Fcov95=0.98 gp:Fcov95=1.00
+[   134s] short rep 2 labels_cov95=0.95: ens_init:Fcov95=0.20 ens_noise:Fcov95=0.99 ens_noise_rc:Fcov95=0.96 gp:Fcov95=1.00
+[   180s] short rep 3 labels_cov95=0.96: ens_init:Fcov95=0.03 ens_noise:Fcov95=0.99 ens_noise_rc:Fcov95=0.87 gp:Fcov95=0.99
+[   224s] short rep 4 labels_cov95=0.96: ens_init:Fcov95=0.29 ens_noise:Fcov95=1.00 ens_noise_rc:Fcov95=0.99 gp:Fcov95=0.96
+[   269s] short rep 5 labels_cov95=0.96: ens_init:Fcov95=0.37 ens_noise:Fcov95=0.98 ens_noise_rc:Fcov95=0.78 gp:Fcov95=0.97
+[   313s] short rep 6 labels_cov95=0.95: ens_init:Fcov95=0.45 ens_noise:Fcov95=1.00 ens_noise_rc:Fcov95=1.00 gp:Fcov95=1.00
+[   358s] short rep 7 labels_cov95=0.97: ens_init:Fcov95=0.35 ens_noise:Fcov95=1.00 ens_noise_rc:Fcov95=0.82 gp:Fcov95=1.00
+[   402s] short rep 8 labels_cov95=0.95: ens_init:Fcov95=0.32 ens_noise:Fcov95=1.00 ens_noise_rc:Fcov95=0.86 gp:Fcov95=0.99
+[   446s] short rep 9 labels_cov95=0.95: ens_init:Fcov95=0.11 ens_noise:Fcov95=0.93 ens_noise_rc:Fcov95=0.82 gp:Fcov95=0.93
+[   511s] long rep 0 labels_cov95=0.95: ens_init:Fcov95=0.45 ens_noise:Fcov95=1.00 ens_noise_rc:Fcov95=0.81 gp:Fcov95=1.00
+[   576s] long rep 1 labels_cov95=0.94: ens_init:Fcov95=0.26 ens_noise:Fcov95=0.98 ens_noise_rc:Fcov95=0.99 gp:Fcov95=0.99
+[   642s] long rep 2 labels_cov95=0.94: ens_init:Fcov95=0.60 ens_noise:Fcov95=1.00 ens_noise_rc:Fcov95=0.70 gp:Fcov95=1.00
+[   709s] long rep 3 labels_cov95=0.96: ens_init:Fcov95=0.48 ens_noise:Fcov95=0.95 ens_noise_rc:Fcov95=0.64 gp:Fcov95=0.99
+[   778s] long rep 4 labels_cov95=0.95: ens_init:Fcov95=0.25 ens_noise:Fcov95=0.83 ens_noise_rc:Fcov95=0.43 gp:Fcov95=0.99
+[   847s] long rep 5 labels_cov95=0.96: ens_init:Fcov95=0.62 ens_noise:Fcov95=0.48 ens_noise_rc:Fcov95=0.13 gp:Fcov95=0.50
+[   912s] long rep 6 labels_cov95=0.94: ens_init:Fcov95=0.23 ens_noise:Fcov95=0.98 ens_noise_rc:Fcov95=0.88 gp:Fcov95=0.95
+[   977s] long rep 7 labels_cov95=0.95: ens_init:Fcov95=0.34 ens_noise:Fcov95=0.99 ens_noise_rc:Fcov95=0.99 gp:Fcov95=1.00
+[  1041s] long rep 8 labels_cov95=0.96: ens_init:Fcov95=0.22 ens_noise:Fcov95=0.99 ens_noise_rc:Fcov95=0.94 gp:Fcov95=0.99
+[  1108s] long rep 9 labels_cov95=0.94: ens_init:Fcov95=0.16 ens_noise:Fcov95=0.99 ens_noise_rc:Fcov95=0.60 gp:Fcov95=0.99
+{
+ "short": {
+  "ens_init": {
+   "force_cov95": 0.543,
+   "F_cov95": 0.301,
+   "F_z_rms": 6.511,
+   "F_rmse": 0.06,
+   "targets_cov95": 0.333
+  },
+  "ens_init_rc": {
+   "force_cov95": 0.863,
+   "F_cov95": 0.641,
+   "F_z_rms": 2.541,
+   "F_rmse": 0.06,
+   "targets_cov95": 0.667
+  },
+  "ens_boot": {
+   "force_cov95": 0.947,
+   "F_cov95": 0.933,
+   "F_z_rms": 0.97,
+   "F_rmse": 0.061,
+   "targets_cov95": 0.967
+  },
+  "ens_boot_rc": {
+   "force_cov95": 0.902,
+   "F_cov95": 0.915,
+   "F_z_rms": 1.123,
+   "F_rmse": 0.061,
+   "targets_cov95": 0.967
+  },
+  "ens_noise": {
+   "force_cov95": 0.959,
+   "F_cov95": 0.986,
+   "F_z_rms": 0.728,
+   "F_rmse": 0.025,
+   "targets_cov95": 1.0
+  },
+  "ens_noise_rc": {
+   "force_cov95": 0.835,
+   "F_cov95": 0.905,
+   "F_z_rms": 1.149,
+   "F_rmse": 0.025,
+   "targets_cov95": 1.0
+  },
+  "gp": {
+   "force_cov95": 0.97,
+   "F_cov95": 0.982,
+   "F_z_rms": 0.724,
+   "F_rmse": 0.021,
+   "targets_cov95": 1.0
+  }
+ },
+ "long": {
+  "ens_init": {
+   "force_cov95": 0.655,
+   "F_cov95": 0.36,
+   "F_z_rms": 5.572,
+   "F_rmse": 0.031,
+   "targets_cov95": 0.4
+  },
+  "ens_init_rc": {
+   "force_cov95": 0.817,
+   "F_cov95": 0.509,
+   "F_z_rms": 3.512,
+   "F_rmse": 0.031,
+   "targets_cov95": 0.467
+  },
+  "ens_boot": {
+   "force_cov95": 0.953,
+   "F_cov95": 0.93,
+   "F_z_rms": 1.006,
+   "F_rmse": 0.03,
+   "targets_cov95": 0.967
+  },
+  "ens_boot_rc": {
+   "force_cov95": 0.86,
+   "F_cov95": 0.833,
+   "F_z_rms": 1.451,
+   "F_rmse": 0.03,
+   "targets_cov95": 0.833
+  },
+  "ens_noise": {
+   "force_cov95": 0.96,
+   "F_cov95": 0.918,
+   "F_z_rms": 1.04,
+   "F_rmse": 0.02,
+   "targets_cov95": 0.867
+  },
+  "ens_noise_rc": {
+   "force_cov95": 0.775,
+   "F_cov95": 0.711,
+   "F_z_rms": 2.243,
+   "F_rmse": 0.02,
+   "targets_cov95": 0.767
+  },
+  "gp": {
+   "force_cov95": 0.978,
+   "F_cov95": 0.94,
+   "F_z_rms": 0.907,
+   "F_rmse": 0.016,
+   "targets_cov95": 0.9
+  }
+ }
+}

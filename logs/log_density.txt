@@ -1,0 +1,13 @@
+density sweep device=cpu densities=[500, 1000, 2000, 4000] replicas=5 steps=8000 wd=0.003 batch=1024
+[   301s] windows=  500 rep 0: ens_init: z=2.46 rmse=0.092 ens_boot: z=0.96 rmse=0.315 gp: z=5.19 rmse=0.172 | sec ens_init=117 ens_boot=75 gp=99
+[   750s] windows= 1000 rep 0: ens_init: z=3.33 rmse=0.062 ens_boot: z=0.98 rmse=0.357 gp: z=6.10 rmse=0.164 | sec ens_init=147 ens_boot=168 gp=119
+[  1355s] windows= 2000 rep 0: ens_init: z=2.08 rmse=0.087 ens_boot: z=1.30 rmse=0.298 gp: z=13.34 rmse=0.160 | sec ens_init=202 ens_boot=177 gp=193
+[  2493s] windows= 4000 rep 0: ens_init: z=2.19 rmse=0.527 ens_boot: z=1.20 rmse=0.493 gp: z=18.21 rmse=0.156 | sec ens_init=189 ens_boot=181 gp=713
+[  2740s] windows=  500 rep 1: ens_init: z=3.51 rmse=0.096 ens_boot: z=1.31 rmse=0.369 gp: z=4.29 rmse=0.130 | sec ens_init=84 ens_boot=82 gp=71
+[  3208s] windows= 1000 rep 1: ens_init: z=3.75 rmse=0.229 ens_boot: z=1.01 rmse=0.387 gp: z=9.04 rmse=0.166 | sec ens_init=150 ens_boot=157 gp=146
+[  3784s] windows= 2000 rep 1: ens_init: z=3.60 rmse=0.165 ens_boot: z=1.43 rmse=0.275 gp: z=12.39 rmse=0.149 | sec ens_init=187 ens_boot=182 gp=176
+[  4912s] windows= 4000 rep 1: ens_init: z=1.59 rmse=0.306 ens_boot: z=1.00 rmse=0.405 gp: z=18.69 rmse=0.161 | sec ens_init=170 ens_boot=175 gp=733
+[  5120s] windows=  500 rep 2: ens_init: z=2.30 rmse=0.085 ens_boot: z=0.73 rmse=0.198 gp: z=5.00 rmse=0.192 | sec ens_init=76 ens_boot=72 gp=51
+[  5497s] windows= 1000 rep 2: ens_init: z=2.30 rmse=0.143 ens_boot: z=1.67 rmse=0.562 gp: z=7.04 rmse=0.138 | sec ens_init=136 ens_boot=147 gp=81
+[  6025s] windows= 2000 rep 2: ens_init: z=3.09 rmse=0.262 ens_boot: z=1.48 rmse=0.429 gp: z=13.67 rmse=0.160 | sec ens_init=179 ens_boot=173 gp=148
+[  7155s] windows= 4000 rep 2: ens_init: z=2.35 rmse=0.373 ens_boot: z=2.20 rmse=0.496 gp: z=18.32 rmse=0.152 | sec ens_init=173 ens_boot=187 gp=721
