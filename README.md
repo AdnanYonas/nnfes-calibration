@@ -6,7 +6,7 @@ Code and data for a calibration study of uncertainty estimates for free-energy s
 Adnan Younas (Department of Computer Science, Bahria University, Islamabad) and
 Habiba Adnan (Department of Computer Science, Virtual University of Pakistan, Islamabad).
 
-[![DOI](https://zenodo.org/badge/DOI/ZENODO_DOI_HERE.svg)](https://doi.org/ZENODO_DOI_HERE)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23736874.svg)](https://doi.org/10.5281/zenodo.23736874)
 
 ---
 
@@ -138,7 +138,7 @@ If you use this code or data, please cite the archived version (see `CITATION.cf
 
 > A. Younas and H. Adnan, *Code and data for: Do neural-network free-energy surfaces know when they are wrong?
 > Calibrated uncertainty for free-energy landscapes learned from mean forces*, version 1.0.0, Zenodo (2026),
-> doi:ZENODO_DOI_HERE.
+> doi:10.5281/zenodo.23736874.
 
 ## License
 
