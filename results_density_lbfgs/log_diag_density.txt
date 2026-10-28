@@ -1,0 +1,6 @@
+windows 2000 | w64 wd3e-3 (current)   wd=3.0e-03 |  137s | F rmse 0.068 | after offset 0.065 | grad err 0.230 | z 3.93
+windows 2000 | w64 wd scaled 850/N    wd=1.5e-03 |  133s | F rmse 0.094 | after offset 0.084 | grad err 0.226 | z 3.53
+windows 2000 | w128 wd3e-3            wd=3.0e-03 |  270s | F rmse 0.097 | after offset 0.087 | grad err 0.231 | z 5.18
+windows 2000 | w128 wd scaled 850/N   wd=1.5e-03 |  258s | F rmse 0.111 | after offset 0.096 | grad err 0.236 | z 4.03
+windows 4000 | w64 wd3e-3 (current)   wd=3.0e-03 |   92s | F rmse 0.458 | after offset 0.400 | grad err 0.189 | z 3.70
+windows 4000 | w64 wd scaled 850/N    wd=7.5e-04 |   98s | F rmse 0.401 | after offset 0.356 | grad err 0.173 | z 3.96
