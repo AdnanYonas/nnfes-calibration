@@ -1,0 +1,13 @@
+{
+  "title": "Code and data for: Do neural-network free-energy surfaces know when they are wrong? Calibrated uncertainty for free-energy landscapes learned from mean forces",
+  "upload_type": "software",
+  "description": "<p>Code, simulation data and results for a calibration study of uncertainty estimates for free-energy surfaces learned from mean forces. Neural-network ensembles (random initialization, bootstrap, noise injection, with and without held-out-label rescaling) and a gradient-observation Gaussian process are tested against known truth on a 2D and a 4D model with exact free energies and on alanine dipeptide in vacuum (OpenMM) referenced to four independent well-tempered metadynamics runs.</p><p>Includes all source code, the metadynamics reference free-energy surfaces, per-replica raw results and summaries for every experiment, run logs, and the scripts that regenerate every figure and table of the manuscript.</p>",
+  "creators": [
+    {"name": "Younas, Adnan", "affiliation": "Department of Computer Science, Bahria University, Islamabad, Pakistan"},
+    {"name": "Adnan, Habiba", "affiliation": "Department of Computer Science, Virtual University of Pakistan, Islamabad, Pakistan"}
+  ],
+  "license": "MIT",
+  "access_right": "open",
+  "version": "1.0.0",
+  "keywords": ["free energy", "uncertainty quantification", "calibration", "neural networks", "Gaussian processes", "umbrella integration", "metadynamics", "alanine dipeptide"]
+}
