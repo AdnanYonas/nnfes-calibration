@@ -1,0 +1,21 @@
+\begin{table*}
+\caption{Alanine dipeptide in explicit water (TIP3P, 300 K) against the 4 $\times$ 50 ns metadynamics reference: 5 replicas per regime, 401 windows, 1882 test points with $F_{\rm ref}<8$ kT. All $z$-scores include the reference's own standard error in quadrature. Targets: $\Delta F(\alpha_R-\mathrm{PPII})$, $\Delta F(\alpha_L-\mathrm{PPII})$ and the barrier to $\alpha_L$ (15 estimates per cell). Columns as in Table~\ref{tab:2d}.}
+\label{tab:ala2water}
+\begin{ruledtabular}
+\begin{tabular}{lcccccccccc}
+ & \multicolumn{5}{c}{Short runs} & \multicolumn{5}{c}{Long runs} \\
+\cline{2-6}\cline{7-11}
+Method & $z_{\nabla F}$ & $z_F$ & cov$_{95}^F$ (\%) & RMSE$_F$ (kT) & cov$_{95}^{\rm tgt}$ (\%) & $z_{\nabla F}$ & $z_F$ & cov$_{95}^F$ (\%) & RMSE$_F$ (kT) & cov$_{95}^{\rm tgt}$ (\%) \\
+\hline
+Random-init ensemble & 2.12 & 2.18 & 67 & 0.862 & 53 & 2.69 & 3.62 & 41 & 0.332 & 47 \\
+\quad + held-out rescaling & 1.60 & 1.61 & 81 & 0.862 & 73 & 1.26 & 1.87 & 72 & 0.332 & 67 \\
+Bootstrap ensemble & 0.87 & 0.73 & 98 & 0.633 & 100 & 1.04 & 0.99 & 95 & 0.308 & 100 \\
+\quad + held-out rescaling & 1.09 & 0.91 & 96 & 0.633 & 100 & 1.29 & 1.20 & 92 & 0.308 & 93 \\
+Noise-injected ensemble & 1.05 & 1.07 & 93 & 0.745 & 93 & 1.24 & 1.43 & 83 & 0.327 & 87 \\
+\quad + held-out rescaling & 1.19 & 1.21 & 90 & 0.745 & 87 & 1.16 & 1.35 & 85 & 0.327 & 93 \\
+Gradient GP & 1.62 & 1.28 & 87 & 0.424 & 87 & 1.74 & 1.74 & 70 & 0.289 & 73 \\
+\hline
+Labels (block errors) & \multicolumn{5}{c}{95\% coverage 83\%} & \multicolumn{5}{c}{95\% coverage 82\%} \\
+\end{tabular}
+\end{ruledtabular}
+\end{table*}

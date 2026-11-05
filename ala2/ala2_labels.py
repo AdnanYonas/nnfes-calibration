@@ -13,11 +13,11 @@ import openmm as mm
 import openmm.app as app
 import openmm.unit as u
 from multiprocessing import Pool
-from ala2_system import (load, base_system, add_restraint, dihedrals, wrap,
-                         T, KT_KJ, DT_FS)
+from ala2_system import (make_model, make_simulation, add_restraint, add_cv_readout,
+                         dihedrals, wrap, T, KT_KJ, DT_FS)
 
 K_RES = 1000.0                       # kJ/mol/rad^2
-SAMPLE_EVERY = 10                    # steps between recorded (phi, psi)
+SAMPLE_EVERY = {"vacuum": 10, "water": 25}   # steps between recorded (phi, psi)
 
 
 def serpentine(centres, spacing):
@@ -28,15 +28,14 @@ def serpentine(centres, spacing):
 
 
 def _run_chunk(args):
-    centres, n_prod, n_eq_first, n_eq, seed, threads = args
-    prm, crd = load()
-    system = base_system(prm)
-    add_restraint(system, centres[0], K_RES)
+    centres, n_prod, n_eq_first, n_eq, seed, threads, solvent, prefer = args
+    model = make_model(solvent)
+    add_restraint(model["system"], centres[0], K_RES)
+    cvf = add_cv_readout(model["system"]) if solvent != "vacuum" else None
     integ = mm.LangevinMiddleIntegrator(T * u.kelvin, 1 / u.picosecond, DT_FS * u.femtosecond)
     integ.setRandomNumberSeed(int(seed))
-    sim = app.Simulation(prm.topology, system, integ, mm.Platform.getPlatformByName("CPU"),
-                         {"Threads": str(threads)})
-    sim.context.setPositions(crd.positions)
+    sim = make_simulation(model, integ, solvent=solvent, threads=threads, prefer=prefer)
+    every = SAMPLE_EVERY[solvent]
     sim.context.setParameter("phi0", centres[0][0]); sim.context.setParameter("psi0", centres[0][1])
     sim.minimizeEnergy()
     sim.context.setVelocitiesToTemperature(T * u.kelvin, int(seed))
@@ -54,12 +53,15 @@ def _run_chunk(args):
         sim.context.setParameter("phi0", float(c[0]))
         sim.context.setParameter("psi0", float(c[1]))
         sim.step(n_eq_first if w == 0 else n_eq)
-        n_rec = n_prod // SAMPLE_EVERY
+        n_rec = n_prod // every
         traj = np.empty((n_rec, 2))
         for r in range(n_rec):
-            sim.step(SAMPLE_EVERY)
-            pos = sim.context.getState(getPositions=True).getPositions(asNumpy=True).value_in_unit(u.nanometer)
-            traj[r] = dihedrals(np.asarray(pos))
+            sim.step(every)
+            if cvf is None:
+                pos = sim.context.getState(getPositions=True).getPositions(asNumpy=True).value_in_unit(u.nanometer)
+                traj[r] = dihedrals(np.asarray(pos))
+            else:
+                traj[r] = cvf.getCollectiveVariableValues(sim.context)
         d = wrap(traj - c)                                  # displacement from centre
         f = -K_RES * d / KT_KJ                              # k (c - s) in kT/rad, per frame
         nb = 5
@@ -70,14 +72,16 @@ def _run_chunk(args):
     return out
 
 
-def sample_labels(centres, prod_ps, seed=0, n_proc=None, eq_first_ps=20.0, eq_ps=4.0, spacing=None):
+def sample_labels(centres, prod_ps, seed=0, n_proc=None, eq_first_ps=20.0, eq_ps=4.0, spacing=None,
+                  solvent="vacuum", prefer=None, threads=1):
     """Run all windows. Returns dict(s, g, se, centres) in the input order."""
     n_proc = n_proc or max(1, (os.cpu_count() or 2))
     spacing = spacing or 2 * np.pi / 18
     order = serpentine(centres, spacing)
     chunks = np.array_split(order, n_proc)
     steps = lambda ps: int(round(ps * 1000 / DT_FS))
-    jobs = [(centres[ch], steps(prod_ps), steps(eq_first_ps), steps(eq_ps), seed * 1000 + k + 1, 1)
+    jobs = [(centres[ch], steps(prod_ps), steps(eq_first_ps), steps(eq_ps), seed * 1000 + k + 1, threads,
+             solvent, prefer)
             for k, ch in enumerate(chunks) if len(ch)]
     if n_proc == 1:
         res = [_run_chunk(j) for j in jobs]

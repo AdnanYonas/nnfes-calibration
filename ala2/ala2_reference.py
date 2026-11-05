@@ -23,11 +23,15 @@ def _periodic_spline(F):
 
 
 class Reference:
-    def __init__(self, pattern=os.path.join(HERE, "ref_run*.npz")):
+    def __init__(self, pattern=None, solvent="vacuum"):
+        if pattern is None:
+            pattern = os.path.join(HERE, "ref_run*.npz" if solvent == "vacuum" else f"ref_{solvent}_run*.npz")
         runs = []
         for f in sorted(glob.glob(pattern)):
             F = np.load(f)["fes"][-1].T[:N, :N]          # -> [phi, psi]
             runs.append(F - F.min())
+        if not runs:
+            raise FileNotFoundError(f"no reference runs match {pattern}; run reference_metad.py first")
         self.runs = np.array(runs)
         self.n_runs = len(runs)
         # align runs by their mean over the low-F region before averaging
@@ -90,7 +94,8 @@ class Reference:
 
 
 if __name__ == "__main__":
-    R = Reference()
+    import sys
+    R = Reference(solvent=sys.argv[1] if len(sys.argv) > 1 else "vacuum")
     print("runs:", R.n_runs)
     for phi, psi, f in R.minima():
         print(f"minimum phi {np.degrees(phi):6.1f} psi {np.degrees(psi):6.1f}  F {f:.2f} kT")

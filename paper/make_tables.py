@@ -152,3 +152,12 @@ write("tab_ala2", main_table(SA, M6,
 # label diagnosis numbers for the text
 open(os.path.join(OUT, "numbers.json"), "w").write(json.dumps(lc, indent=1))
 print(json.dumps(lc, indent=1))
+
+# Table VIII: alanine dipeptide in explicit water
+SW = L("ala2/results_ala2_water/ala2_results.json")
+write("tab_ala2_water", main_table(SW, M6,
+      "Alanine dipeptide in explicit water (TIP3P, 300 K) against the 4 $\\times$ 50 ns metadynamics reference: "
+      "5 replicas per regime, 401 windows, 1882 test points with $F_{\\rm ref}<8$ kT. All $z$-scores include the "
+      "reference's own standard error in quadrature. Targets: $\\Delta F(\\alpha_R-\\mathrm{PPII})$, "
+      "$\\Delta F(\\alpha_L-\\mathrm{PPII})$ and the barrier to $\\alpha_L$ (15 estimates per cell). Columns as in "
+      "Table~\\ref{tab:2d}.", "tab:ala2water"))

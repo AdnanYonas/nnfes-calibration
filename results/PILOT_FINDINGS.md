@@ -176,3 +176,25 @@ replicas per regime, not a rerun of the same ones):
 | long  | 3.19 / 2.04 / 1.61 / 2.12 / 2.02 | 0.108 / 0.112 / 0.107 | 0.87 / 1.00 / 0.93 |
 31. Findings 26-30 replicate: same ranking, z-scores within ~0.3, RMSE within 0.01 kT, label 95% coverage
     0.79 (short) and 0.62 (long) on both machines. The paper can pool 10 replicas per regime.
+
+## Alanine dipeptide in explicit water (v1.1.0)
+
+Amber14 (ff14SB) + TIP3P, 423 waters, 1291 atoms, 2.361 nm box after 200 ps NPT, then NVT; PME 0.9 nm; same CVs,
+kappa, path and window lengths as vacuum; CVs sampled every 50 fs. 401 windows (F_ref < 15), 1882 test points
+(F_ref < 8). Reference: 4 x 50 ns WT-metaD (OpenCL, GTX 1660 Super); runs changed 0.09-0.14 kT from 40 to 50 ns;
+sigma_ref 0.058 kT (F), 0.14 kT/rad (grad F). Anchor PPII (-68,155); dF(alphaR) 0.96 +- 0.07, dF(alphaL) 2.71 +- 0.17,
+barrier to alphaL 11.21 +- 0.04 kT at (3,94).
+
+| Regime | F z: init / +resc / boot / noise / GP | F RMSE: init / boot / GP | targets 95% cov: init / boot / GP |
+|---|---|---|---|
+| short | 2.18 / 1.61 / 0.73 / 1.07 / 1.28 | 0.86 / 0.63 / 0.42 | 0.53 / 1.00 / 0.87 |
+| long  | 3.62 / 1.87 / 0.99 / 1.43 / 1.74 | 0.33 / 0.31 / 0.29 | 0.47 / 1.00 / 0.73 |
+
+32. Same ranking as in vacuum; bootstrap calibrated in both regimes.
+33. Label 95% coverage 0.83 (short) / 0.82 (long), vs 0.79 / 0.62 in vacuum: long runs no longer degrade labels.
+34. Leading-order estimator bias (bias_estimate.py) is 0.066 kT/rad in vacuum and 0.089 in water, far below the
+    ~0.4 kT/rad systematic long-run label error in vacuum. The vacuum excess is therefore not the curvature bias;
+    most plausible cause is slow relaxation of orthogonal degrees of freedom (intramolecular H-bonds) after each
+    window starts from its neighbour. Not tested directly.
+35. Short water labels are very noisy: force RMSE 2.9 (init, noise), 1.6 (boot), 0.86 (GP) kT/rad. GP most accurate
+    in F (0.42 vs 0.63-0.86 kT), bootstrap honest but wide (mean sigma_F 1.06 kT vs 0.34 for GP; GP z 1.28).

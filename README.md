@@ -1,6 +1,6 @@
 # nnfes-calibration
 
-**Do neural-network free-energy surfaces know when they are wrong?**
+**Are neural-network free-energy error bars calibrated?** Tests on exact models and on alanine dipeptide in vacuum and explicit water.
 Code and data for a calibration study of uncertainty estimates for free-energy surfaces (FES) learned from mean forces.
 
 Adnan Younas (Department of Computer Science, Bahria University, Islamabad) and
@@ -20,6 +20,7 @@ Each model's error bars are tested against a known truth:
 | 2D model (Müller–Brown plus a hidden coordinate) | exact F | `src/system.py`, `results*/` |
 | 4D non-separable model | exact F | `src/system4d.py`, `results_4d*/`, `results_density*/` |
 | Alanine dipeptide in vacuum, 300 K (OpenMM), CVs φ/ψ | mean of 4 × 25 ns well-tempered metadynamics runs | `ala2/` |
+| Alanine dipeptide in explicit water (Amber14/TIP3P, 1291 atoms, PME), 300 K | mean of 4 × 50 ns well-tempered metadynamics runs | `ala2/` (`--solvent water`) |
 
 The uncertainty methods tested (`src/models.py`) are:
 
@@ -47,17 +48,21 @@ src/                     model systems, samplers, models, experiment runners, or
   tune_4d.py                  4D hyperparameter search on held-out labels only
   run_density.py              4D data-density sweep (500-4000 windows)
 ala2/                    alanine dipeptide
-  ala2_system.py              OpenMM system, dihedral CVs, restraints
-  reference_metad.py          well-tempered metadynamics reference run
-  ref_run1..4.npz             the four 25 ns reference FES (saved every 5 ns)
+  ala2_system.py              OpenMM systems (vacuum / water), dihedral CVs, restraints, platform choice
+  reference_metad.py          well-tempered metadynamics reference run (--solvent, --resume)
+  ref_run1..4.npz             the four 25 ns vacuum reference FES (saved every 5 ns)
+  ref_water_run1..4.npz       the four 50 ns water reference FES (saved every 5 ns)
+  benchmark_platform.py       lists OpenMM platforms and measures water MD speed
+  bias_estimate.py            leading-order umbrella-integration bias from the reference (vacuum and water)
   ala2_reference.py           reference F, its gradient and its standard error
   ala2_labels.py              restrained-MD umbrella-integration labels
   run_ala2.py                 the calibration study (short 10 ps / long 50 ps per window)
   pool_replicas.py            pools the two machines' replicas -> ala2_pooled_results.json
   label_check.py              label-error diagnosis (block error vs reference error)
-  data/                       topology/coordinates (from the openmmtools test-system collection)
+  data/                       vacuum topology/coordinates (openmmtools test systems); ala2_water_equil.pdb (NPT-equilibrated water box)
   results_ala2/               5 replicas per regime, Linux workstation
   results_ala2_user/          5 replicas per regime, Windows desktop (independent trajectories)
+  results_ala2_water/         explicit water, 5 replicas per regime (Windows desktop, GTX 1660 Super, OpenCL)
 results/                 2D, raw MD labels          (10 replicas per regime)
 results_debiased/        2D, estimator bias removed (same seeds)
 results_oracle/          2D, oracle labels          (same seeds)
@@ -68,7 +73,7 @@ results_density/         4D density sweep, preliminary (no L-BFGS polish, 3 repl
 results_density_lbfgs/   4D density sweep, final (with L-BFGS polish, 3 replicas)
 results/PILOT_FINDINGS.md   running log of all findings (1-31)
 paper/                   scripts that regenerate every manuscript figure and table from the result files
-  make_paper_figures.py -> paper/figures/fig1..fig10 (.pdf, .png)
+  make_paper_figures.py -> paper/figures/fig1..fig11 and toc_graphic (.pdf, .png)
   make_tables.py        -> paper/tables/*.tex
 logs/                    console logs of every run
 ```
@@ -94,7 +99,7 @@ conda activate fescal
 pip install -r requirements.txt
 ```
 
-A CPU is enough. If a CUDA GPU is present, PyTorch uses it automatically. OpenMM is needed only for `ala2/`.
+A CPU is enough for everything except the explicit-water runs, which need a GPU (OpenMM picks CUDA, then OpenCL, then CPU; force one with `--platform`). If a CUDA GPU is present, PyTorch uses it automatically. OpenMM is needed only for `ala2/`.
 
 ## Reproducing the results
 
@@ -112,6 +117,10 @@ ones accept `--resume`, which continues after an interruption.
 | 4D density sweep | `python run_density.py --replicas 3 --out ../results_density_lbfgs --resume` | ~2 h |
 | Ala2 reference (optional; the four runs are included) | `cd ala2` then `python reference_metad.py --seed 1 --ns 25 --out ref_run1.npz` (seeds 1–4) | ~20 min each |
 | Ala2 study | `python run_ala2.py --resume --out results_ala2_mine` | 1.5–3 h |
+| Water: check GPU speed | `python benchmark_platform.py` | 1 min |
+| Water reference (optional; included) | `python reference_metad.py --solvent water --seed 1 --ns 50 --resume` (seeds 1–4) | 5–10 h each on a GTX 1660 Super |
+| Water study | `python run_ala2.py --solvent water --resume` | ~1 day on a GTX 1660 Super |
+| Bias estimate | `python bias_estimate.py` | seconds |
 | Pool Ala2 replicas | `python pool_replicas.py` | seconds |
 | Manuscript figures and tables | `cd paper` then `python make_paper_figures.py` and `python make_tables.py` | ~1 min |
 
@@ -122,12 +131,12 @@ replicas.
 
 ## Key numbers (free-energy RMS z-score; 1 = calibrated)
 
-| | 2D short / long | 4D tuned short / long | Alanine dipeptide short / long |
-|---|---|---|---|
-| Random-init ensemble | 7.27 / 10.66 | 3.67 / 2.53 | 2.93 / 3.26 |
-| Bootstrap ensemble | 0.98 / 1.97 | 1.18 / 1.55 | 1.05 / 1.76 |
-| Noise-injected ensemble | 4.11 / 2.90 | 9.16 / 2.58 | 1.58 / 2.13 |
-| Gradient GP | 4.11 / 3.07 | 8.59 / 3.42 | 1.65 / 2.11 |
+| | 2D short / long | 4D tuned short / long | Ala2 vacuum short / long | Ala2 water short / long |
+|---|---|---|---|---|
+| Random-init ensemble | 7.27 / 10.66 | 3.67 / 2.53 | 2.93 / 3.26 | 2.18 / 3.62 |
+| Bootstrap ensemble | 0.98 / 1.97 | 1.18 / 1.55 | 1.05 / 1.76 | 0.73 / 0.99 |
+| Noise-injected ensemble | 4.11 / 2.90 | 9.16 / 2.58 | 1.58 / 2.13 | 1.07 / 1.43 |
+| Gradient GP | 4.11 / 3.07 | 8.59 / 3.42 | 1.65 / 2.11 | 1.28 / 1.74 |
 
 In the 4D density sweep, the GP's z-score rises from 4.8 (500 windows) to 18.4 (4000 windows) while its accuracy
 stays flat.
@@ -136,9 +145,9 @@ stays flat.
 
 If you use this code or data, please cite the archived version (see `CITATION.cff`):
 
-> A. Younas and H. Adnan, *Code and data for: Do neural-network free-energy surfaces know when they are wrong?
-> Calibrated uncertainty for free-energy landscapes learned from mean forces*, version 1.0.0, Zenodo (2026),
-> doi:10.5281/zenodo.23736874.
+> A. Younas and H. Adnan, *Code and data for: Are neural-network free-energy error bars calibrated? Tests on exact
+> models and on alanine dipeptide in vacuum and explicit water*, version 1.1.0, Zenodo (2026).
+> Version 1.0.0: doi:10.5281/zenodo.23736874.
 
 ## License
 

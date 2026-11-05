@@ -11,7 +11,10 @@ Same protocol as the toy systems, with a metadynamics reference as "truth":
             own standard error, so the test is conservative
   targets   dF(C7eq - C5), dF(C7ax - C5), barrier C7eq->C7ax (lowest saddle), anchored at C5
 
-Usage: python run_ala2.py [--replicas 5] [--out DIR] [--resume] [--quick] [--procs N]
+Usage: python run_ala2.py [--solvent vacuum|water] [--replicas 5] [--out DIR] [--resume] [--quick] [--procs N]
+In water, MD runs on the fastest OpenMM platform (CUDA > OpenCL > CPU); targets are chosen
+automatically from the reference: anchor = global minimum, targets = the next two distinct
+minima and the lowest saddle between them.
 """
 import argparse, json, os, sys, time
 import numpy as np
@@ -27,7 +30,57 @@ REGIMES = {"short": 10.0, "long": 50.0}          # ps of production per window
 run_pilot.TARGET_NAMES = ["dF_C7eq", "dF_C7ax", "barrier_C7eq_C7ax"]
 
 
-def setup(ref):
+def _torus_dist(p, q):
+    d = (np.asarray(p) - np.asarray(q) + np.pi) % (2 * np.pi) - np.pi
+    return np.degrees(np.sqrt((d ** 2).sum()))
+
+
+def setup_generic(ref, f_cut=15.0, min_sep_deg=60.0):
+    mins = sorted(ref.minima(), key=lambda m: m[2])
+    picked = []
+    for m in mins:
+        if all(_torus_dist(m[:2], p[:2]) >= min_sep_deg for p in picked):
+            picked.append(m)
+        if len(picked) == 3:
+            break
+    if len(picked) < 3:
+        raise RuntimeError(f"found only {len(picked)} distinct minima in the reference")
+    anchor, t1, t2 = (np.array(m[:2]) for m in picked)
+    idx = lambda p: tuple(np.round((p + np.pi) / (2 * np.pi / N)).astype(int) % N)
+    sad, f_sad = ref.minimax_saddle(idx(t1), idx(t2))
+    f_cut = max(f_cut, float(f_sad) + 2.0)
+    g15 = np.radians(np.arange(-180, 180, 15.0))
+    C = np.array([(a, b) for a in g15 for b in g15])
+    C = C[ref.free_energy(C)[0] < f_cut]
+    P = np.array([(GRID[i], GRID[j]) for i in range(N) for j in range(N) if ref.F[i, j] < 8.0])
+    return dict(ref_pt=anchor, targets=np.array([t1, t2, sad]), centres=C, test=P, f_cut=f_cut,
+                names=["dF_t1", "dF_t2", "barrier_t1_t2"])
+
+
+def setup_water(ref, f_cut=15.0):
+    """Water: anchor at the global minimum (PPII), targets alpha_R, alpha_L and the
+    lowest saddle on the way to alpha_L (crossing phi = 0), the slow transition."""
+    mins = ref.minima(f_max=12.0)
+    near = lambda phi, psi: np.array(min(mins, key=lambda m: ((m[0] - np.radians(phi)) ** 2
+                                                              + (m[1] - np.radians(psi)) ** 2))[:2])
+    anchor = np.array(min(mins, key=lambda m: m[2])[:2])
+    a_r, a_l = near(-70, -20), near(55, 35)
+    idx = lambda p: tuple(np.round((p + np.pi) / (2 * np.pi / N)).astype(int) % N)
+    sad, f_sad = ref.minimax_saddle(idx(a_r), idx(a_l))
+    f_cut = max(f_cut, float(f_sad) + 2.0)
+    g15 = np.radians(np.arange(-180, 180, 15.0))
+    C = np.array([(a, b) for a in g15 for b in g15])
+    C = C[ref.free_energy(C)[0] < f_cut]
+    P = np.array([(GRID[i], GRID[j]) for i in range(N) for j in range(N) if ref.F[i, j] < 8.0])
+    return dict(ref_pt=anchor, targets=np.array([a_r, a_l, sad]), centres=C, test=P, f_cut=f_cut,
+                names=["dF_alphaR", "dF_alphaL", "barrier_to_alphaL"])
+
+
+def setup(ref, solvent="vacuum"):
+    if solvent == "water":
+        return setup_water(ref)
+    if solvent != "vacuum":
+        return setup_generic(ref)
     mins = ref.minima()
     def nearest(phi, psi):
         return min(mins, key=lambda m: ((m[0] - phi) ** 2 + (m[1] - psi) ** 2))
@@ -49,8 +102,9 @@ def anchored_ref_precision(ref, pts, anchor):
 
 
 def run_replica(regime, rep, S, ref, args):
-    seed = 7000 + 1000 * list(REGIMES).index(regime) + rep
-    d = sample_labels(S["centres"], REGIMES[regime], seed=seed, n_proc=args.procs)
+    seed = (7000 if args.solvent == "vacuum" else 27000) + 1000 * list(REGIMES).index(regime) + rep
+    d = sample_labels(S["centres"], REGIMES[regime], seed=seed, n_proc=args.procs,
+                      solvent=args.solvent, prefer=args.platform)
     n = len(d["s"])
     idx = np.random.default_rng(seed).permutation(n)
     ho, tr = idx[:int(0.15 * n)], idx[int(0.15 * n):]
@@ -95,18 +149,27 @@ def run_replica(regime, rep, S, ref, args):
 
 def main():
     ap = argparse.ArgumentParser()
+    ap.add_argument("--solvent", default="vacuum", choices=["vacuum", "water"])
+    ap.add_argument("--platform", default=None, help="force CUDA / OpenCL / CPU for the MD (water)")
     ap.add_argument("--replicas", type=int, default=5)
     ap.add_argument("--members", type=int, default=8)
     ap.add_argument("--epochs", type=int, default=8000)
     ap.add_argument("--wd", type=float, default=3e-3)
     ap.add_argument("--lbfgs", type=int, default=3000)
-    ap.add_argument("--procs", type=int, default=None, help="parallel MD processes (default: all cores)")
-    ap.add_argument("--out", default=os.path.join(HERE, "results_ala2"))
+    ap.add_argument("--procs", type=int, default=None,
+                    help="parallel MD processes (default: all cores in vacuum, 2 in water, which share the GPU)")
+    ap.add_argument("--out", default=None, help="default: results_ala2 (vacuum) / results_ala2_water")
     ap.add_argument("--resume", action="store_true")
     ap.add_argument("--quick", action="store_true", help="smoke test: 1 replica, short only, few steps")
     a = ap.parse_args()
-    ref = Reference()
-    S = setup(ref)
+    if a.out is None:
+        a.out = os.path.join(HERE, "results_ala2" if a.solvent == "vacuum" else f"results_ala2_{a.solvent}")
+    if a.procs is None and a.solvent != "vacuum":
+        a.procs = 2
+    ref = Reference(solvent=a.solvent)
+    S = setup(ref, a.solvent)
+    if "names" in S:
+        run_pilot.TARGET_NAMES = S["names"]
     regimes = list(REGIMES)
     if a.quick:
         a.replicas, a.epochs, a.lbfgs, regimes = 1, 300, 50, ["short"]
@@ -117,8 +180,10 @@ def main():
         all_out.update(json.load(open(raw_path)))
         print("resuming: already done " + ", ".join(f"{k}={len(v)}" for k, v in all_out.items()), flush=True)
     t = ref.free_energy(S["targets"])[0] - ref.free_energy(S["ref_pt"][None])[0][0]
-    print(f"alanine dipeptide: reference runs={ref.n_runs} windows={len(S['centres'])} test points={len(S['test'])} "
-          f"targets(kT)={np.round(t, 2).tolist()} device={DEVICE}", flush=True)
+    print(f"alanine dipeptide ({a.solvent}): reference runs={ref.n_runs} windows={len(S['centres'])} "
+          f"test points={len(S['test'])} anchor(deg)={np.round(np.degrees(S['ref_pt']), 0).tolist()} "
+          f"targets(deg)={np.round(np.degrees(S['targets']), 0).tolist()} targets(kT)={np.round(t, 2).tolist()} "
+          f"device={DEVICE}", flush=True)
     t0 = time.time()
     for regime in regimes:
         for rep in range(len(all_out[regime]), a.replicas):

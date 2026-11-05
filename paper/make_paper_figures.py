@@ -148,7 +148,8 @@ def fig_systems():
     import system4d as S4
     from ala2_reference import Reference, GRID as AGRID
     from run_ala2 import setup
-    fig, axs = plt.subplots(1, 3, figsize=(W2, 2.35), gridspec_kw=dict(width_ratios=[1.12, 1.12, 1], wspace=0.42))
+    fig, axs = plt.subplots(2, 2, figsize=(W2, 5.6), gridspec_kw=dict(wspace=0.38, hspace=0.42))
+    axs = axs.ravel()
     # (a) 2D
     ax = axs[0]
     xs = np.linspace(-1.6, 1.1, 220); ys = np.linspace(-0.4, 2.0, 220)
@@ -163,15 +164,15 @@ def fig_systems():
                 bbox=dict(boxstyle="circle,pad=0.12", fc="white", ec=INK2, lw=0.6))
     ax.plot(*S2.SADDLES["S1"], "x", color="#e34948", ms=5, mew=1.5)
     ax.text(S2.SADDLES["S1"][0] + 0.06, S2.SADDLES["S1"][1] + 0.08, "S1", fontsize=7, color=INK)
-    ax.set_xlabel("$x$"); ax.set_ylabel("$y$"); ax.set_title("(a) 2D, exact $F$", loc="left", fontweight="bold")
-    # (b) 4D projection: min over (u, v) on an (x, y) grid
+    ax.set_xlabel("$x$"); ax.set_ylabel("$y$"); ax.set_title("(a) 2D model, exact $F$", loc="left", fontweight="bold")
+    # (b) 4D projection
     ax = axs[1]
     xs4 = np.linspace(-1.6, 1.1, 90); ys4 = np.linspace(-0.4, 2.0, 90)
     us = np.linspace(-1.9, 1.9, 41)
     X4, Y4 = np.meshgrid(xs4, ys4)
     best = np.full(X4.shape, np.inf)
     for u in us:
-        v = 0.5 * np.sin(2 * X4) + 0.3 * u            # bottom of the curved v valley
+        v = 0.5 * np.sin(2 * X4) + 0.3 * u
         for dv in (-0.15, 0.0, 0.15):
             P = np.stack([X4.ravel(), Y4.ravel(), np.full(X4.size, u), (v + dv).ravel()], 1)
             best = np.minimum(best, S4.free_energy(P)[0].reshape(X4.shape))
@@ -183,22 +184,23 @@ def fig_systems():
     for k, p in S4.MINIMA.items():
         ax.text(p[0], p[1], k, ha="center", va="center", fontsize=7.5, fontweight="bold",
                 bbox=dict(boxstyle="circle,pad=0.12", fc="white", ec=INK2, lw=0.6))
-    ax.set_xlabel("$x$"); ax.set_ylabel("$y$"); ax.set_title("(b) 4D, min over $(u,v)$", loc="left", fontweight="bold")
-    # (c) alanine dipeptide
-    ax = axs[2]
-    R = Reference(); st = setup(R)
+    ax.set_xlabel("$x$"); ax.set_ylabel("$y$"); ax.set_title("(b) 4D model, min over $(u,v)$", loc="left", fontweight="bold")
+    # (c, d) alanine dipeptide in vacuum and in water
     deg = np.degrees(AGRID)
-    cs = ax.contourf(deg, deg, np.minimum(R.F.T, 14), levels=np.arange(0, 14.5, 1), cmap="Blues_r")
-    ax.contour(deg, deg, R.F.T, levels=np.arange(0, 14, 2), colors="white", linewidths=0.4)
-    Ca = np.degrees(st["centres"])
-    ax.plot(Ca[:, 0], Ca[:, 1], ".", color=INK, ms=1.3)
-    for nm, p in zip(("C5", "C7eq", "C7ax", "TS"), np.degrees(np.vstack([st["ref_pt"], st["targets"]]))):
-        ax.text(p[0], p[1], nm, ha="center", va="center", fontsize=6.5, fontweight="bold",
-                bbox=dict(boxstyle="round,pad=0.15", fc="white", ec=INK2, lw=0.6))
-    ax.set_xlabel("$\\phi$ (deg)"); ax.set_ylabel("$\\psi$ (deg)"); ax.set_aspect("equal")
-    ax.set_xticks([-180, 0, 180]); ax.set_yticks([-180, 0, 180])
-    ax.set_title("(c) Ala2", loc="left", fontweight="bold")
-    cb = fig.colorbar(cs, ax=axs, fraction=0.025, pad=0.035); cb.set_label("$F-F_{\\rm ref}$ (kT)")
+    for ax, solv, names, ttl in ((axs[2], "vacuum", ("C5", "C7eq", "C7ax", "TS"), "(c) Ala2, vacuum"),
+                                 (axs[3], "water", ("PPII", r"$\alpha_R$", r"$\alpha_L$", "TS"), "(d) Ala2, water")):
+        R = Reference(solvent=solv); st = setup(R, solv)
+        cs = ax.contourf(deg, deg, np.minimum(R.F.T, 14), levels=np.arange(0, 14.5, 1), cmap="Blues_r")
+        ax.contour(deg, deg, R.F.T, levels=np.arange(0, 14, 2), colors="white", linewidths=0.4)
+        Ca = np.degrees(st["centres"])
+        ax.plot(Ca[:, 0], Ca[:, 1], ".", color=INK, ms=1.3)
+        for nm, p in zip(names, np.degrees(np.vstack([st["ref_pt"], st["targets"]]))):
+            ax.text(p[0], p[1], nm, ha="center", va="center", fontsize=6.5, fontweight="bold",
+                    bbox=dict(boxstyle="round,pad=0.15", fc="white", ec=INK2, lw=0.6))
+        ax.set_xlabel("$\\phi$ (deg)"); ax.set_ylabel("$\\psi$ (deg)"); ax.set_aspect("equal")
+        ax.set_xticks([-180, -90, 0, 90, 180]); ax.set_yticks([-180, -90, 0, 90, 180])
+        ax.set_title(ttl, loc="left", fontweight="bold")
+    cb = fig.colorbar(cs, ax=axs, fraction=0.025, pad=0.03); cb.set_label("$F-F_{\\rm ref}$ (kT)")
     save(fig, "fig3_systems")
 
 
@@ -349,15 +351,23 @@ def fig_density():
 
 
 # ------------------------------------------------------------------ Fig 9
-def fig_ala2():
-    S = load("ala2/ala2_pooled_results.json")
-    a = load("ala2/results_ala2/ala2_raw.json"); b = load("ala2/results_ala2_user/ala2_raw.json")
-    raw = {r: a[r] + b[r] for r in a}
+def fig_ala2(solvent="vacuum"):
+    if solvent == "vacuum":
+        S = load("ala2/ala2_pooled_results.json")
+        a = load("ala2/results_ala2/ala2_raw.json"); b = load("ala2/results_ala2_user/ala2_raw.json")
+        raw = {r: a[r] + b[r] for r in a}
+        tnames = ["$\\Delta F$(C7eq − C5)", "$\\Delta F$(C7ax − C5)", "barrier C7eq→C7ax"]
+        name = "fig9_ala2"
+    else:
+        S = load("ala2/results_ala2_water/ala2_results.json")
+        raw = load("ala2/results_ala2_water/ala2_raw.json")
+        tnames = ["$\\Delta F$($\\alpha_R$ − PPII)", "$\\Delta F$($\\alpha_L$ − PPII)", "barrier to $\\alpha_L$"]
+        name = "fig10_ala2_water"
     ms = ["ens_init", "ens_init_rc", "ens_boot", "ens_noise", "gp"]
     fig = plt.figure(figsize=(W2, 4.4))
     gs = fig.add_gridspec(2, 3, height_ratios=[1, 1.05], hspace=0.62, wspace=0.32)
     ax = fig.add_subplot(gs[0, 0:2])
-    dotplot(ax, S, "F_z_rms", ms, lo=0.5, hi=6)
+    dotplot(ax, S, "F_z_rms", ms, lo=0.5, hi=6 if solvent == "vacuum" else 8)
     ax.set_ylabel("free-energy RMS $z$"); ax.set_title("(a) free energy on the reference grid", loc="left")
     regime_legend(ax, labels=("short (10 ps/window)", "long (50 ps/window)"))
     ax = fig.add_subplot(gs[0, 2])
@@ -368,7 +378,6 @@ def fig_ala2():
     ax.set_xlim(0, 1); ax.set_ylim(0, 1); ax.set_aspect("equal"); ax.grid(color=GRID, lw=0.4)
     ax.set_xlabel("nominal coverage"); ax.set_ylabel("observed coverage"); ax.set_title("(b) long runs, $\\Delta F(s)$", loc="left")
     # (c-e) target errors with 95% intervals per replica
-    tnames = ["$\\Delta F$(C7eq − C5)", "$\\Delta F$(C7ax − C5)", "barrier C7eq→C7ax"]
     for k in range(3):
         ax = fig.add_subplot(gs[1, k])
         for i, m in enumerate(["ens_init", "ens_boot", "gp"]):
@@ -389,7 +398,11 @@ def fig_ala2():
     method_legend(fig, ms, ncol=5, y=0.995)
     fig.text(0.5, 0.005, "Each bar: one replica, 95% interval (left group short runs, right group long runs); "
              "red × = interval misses the reference.", ha="center", fontsize=7, color=INK2)
-    save(fig, "fig9_ala2")
+    save(fig, name)
+
+
+def fig_ala2_water():
+    fig_ala2("water")
 
 
 # ------------------------------------------------------------------ Fig 10
@@ -397,7 +410,8 @@ def fig_transfer():
     """H2: does force-level calibration transfer to F? force z vs F z, all systems/regimes."""
     sets = [("2D", load("results/pilot_results.json"), "o"),
             ("4D", load("results_4d_tuned/pilot_results.json"), "s"),
-            ("Ala2", load("ala2/ala2_pooled_results.json"), "^")]
+            ("Ala2 vac.", load("ala2/ala2_pooled_results.json"), "^"),
+            ("Ala2 water", load("ala2/results_ala2_water/ala2_results.json"), "v")]
     fig, axs = plt.subplots(1, 2, figsize=(W2, 2.7))
     ax = axs[0]
     for lab, S, mk in sets:
@@ -436,13 +450,45 @@ def fig_transfer():
     ax.set_title("(b) held-out-label rescaling", loc="left")
     h = [Line2D([], [], color=C["ens_init"], lw=1.2, label="free energy"),
          Line2D([], [], color=INK2, lw=1, ls="--", label="mean force")]
-    ax.legend(handles=h, frameon=False, fontsize=7, loc="lower right")
+    ax.legend(handles=h, frameon=False, fontsize=7, loc="lower left")
     fig.tight_layout(w_pad=2)
-    save(fig, "fig10_transfer")
+    save(fig, "fig11_transfer")
+
+
+# ------------------------------------------------------------------ TOC graphic (3.25 x 1.75 in)
+def fig_toc():
+    from ala2_reference import Reference, GRID as AGRID
+    sets = [("2D", load("results/pilot_results.json")), ("4D", load("results_4d_tuned/pilot_results.json")),
+            ("Ala2\nvacuum", load("ala2/ala2_pooled_results.json")),
+            ("Ala2\nwater", load("ala2/results_ala2_water/ala2_results.json"))]
+    fig = plt.figure(figsize=(3.25, 1.75))
+    ax0 = fig.add_axes([0.02, 0.08, 0.30, 0.78])
+    R = Reference(solvent="water"); deg = np.degrees(AGRID)
+    ax0.contourf(deg, deg, np.minimum(R.F.T, 12), levels=np.arange(0, 12.5, 1), cmap="Blues_r")
+    ax0.set_xticks([]); ax0.set_yticks([]); ax0.set_aspect("equal")
+    for sp in ax0.spines.values():
+        sp.set_visible(True); sp.set_color(INK2)
+    ax0.set_title("NN free-energy\nsurface ± σ ?", fontsize=6.8, color=INK, pad=2)
+    ax = fig.add_axes([0.45, 0.24, 0.53, 0.6])
+    for i, (lab, S) in enumerate(sets):
+        for m, dx in (("ens_init", -0.13), ("ens_boot", 0.13)):
+            for regime, fill in (("short", True), ("long", False)):
+                v = S[regime][m]["F_z_rms"]
+                ax.plot(i + dx, v, MK[m], ms=4.2, color=C[m], mfc=C[m] if fill else "white", mew=1.0)
+    ax.set_yscale("log"); ax.set_ylim(0.5, 13); ax.axhline(1, color=INK2, ls="--", lw=0.8)
+    ax.set_yticks([0.5, 1, 2, 4, 8]); ax.set_yticklabels(["0.5", "1", "2", "4", "8"], fontsize=6); ax.minorticks_off()
+    ax.set_xticks(range(4)); ax.set_xticklabels([l for l, _ in sets], fontsize=5.6)
+    ax.set_ylabel("RMS $z$ of $F$", fontsize=6.5, labelpad=1)
+    ax.text(3.35, 9.5, "random init", color=C["ens_init"], fontsize=6.2, ha="right", fontweight="bold")
+    ax.text(1.0, 0.56, "bootstrap", color=C["ens_boot"], fontsize=6.2, ha="center", fontweight="bold")
+    ax.set_title("honest error bars at $z=1$", fontsize=6.8, color=INK, pad=2)
+    fig.savefig(os.path.join(OUT, "toc_graphic.pdf")); fig.savefig(os.path.join(OUT, "toc_graphic.png"), dpi=600)
+    fig.savefig(os.path.join(OUT, "toc_graphic.tif"), dpi=600)
+    plt.close(fig); print("wrote toc_graphic")
 
 
 if __name__ == "__main__":
     which = sys.argv[1:] or ["workflow", "models", "systems", "2d_curves", "2d_z", "ablation",
-                             "4d_tradeoff", "density", "ala2", "transfer"]
+                             "4d_tradeoff", "density", "ala2", "ala2_water", "transfer", "toc"]
     for w in which:
         globals()["fig_" + w]()

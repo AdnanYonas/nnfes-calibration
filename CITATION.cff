@@ -1,9 +1,8 @@
 cff-version: 1.2.0
 message: "If you use this code or data, please cite it as below."
-title: "Code and data for: Do neural-network free-energy surfaces know when they are wrong? Calibrated uncertainty for free-energy landscapes learned from mean forces"
-version: 1.0.0
-doi: 10.5281/zenodo.23736874
-date-released: 2026-10-19
+title: "Code and data for: Are neural-network free-energy error bars calibrated? Tests on exact models and on alanine dipeptide in vacuum and explicit water"
+version: 1.1.0
+date-released: 2026-11-05
 license: MIT
 repository-code: "https://github.com/AdnanYonas/nnfes-calibration"
 authors:
@@ -22,3 +21,4 @@ keywords:
   - umbrella integration
   - metadynamics
   - alanine dipeptide
+  - explicit solvent
